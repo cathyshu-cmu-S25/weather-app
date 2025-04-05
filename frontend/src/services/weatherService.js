@@ -1,4 +1,4 @@
-const API_KEY = '26e771f9ec8f4440a1b32348250504';
+const API_KEY = process.env.OPENWEATHER_API_KEY;
 
 export const getWeatherByCoords = async (lat, lon) => {
   const response = await fetch(
