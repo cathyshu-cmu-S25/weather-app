@@ -4,35 +4,59 @@ const axios = require('axios');
 const router = express.Router();
 const WeatherRecord = require('../models/Weather');
 const Location = require('../models/Location');
+const cors = require('cors');
+
+const API_KEY = process.env.OPENWEATHER_API_KEY;
+const API_BASE_URL = 'https://api.weatherapi.com/v1';
+
+
+async function makeWeatherApiRequest(endpoint, params) {
+  try {
+    console.log(`API Request to: ${API_BASE_URL}/${endpoint}`);
+    console.log('Request params:', { ...params, key: API_KEY.substring(0, 5) + '...' });
+    
+    const response = await axios.get(`${API_BASE_URL}/${endpoint}`, {
+      params: {
+        key: API_KEY,
+        ...params
+      }
+    });
+
+    console.log('API Response status:', response.status);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching ${endpoint}:`, error.response?.data || error.message);
+    if (error.response?.status === 400) {
+      throw { status: 404, message: 'Location not found' };
+    }
+    throw { status: 500, message: 'Failed to fetch weather data' };
+  }
+}
 
 // Get current weather by coordinates
-router.get('/coordinates', async (req, res) => {
+router.get('/coordinates', cors(), async (req, res) => {
   try {
+    console.log('Request received at /coordinates with params:', req.query);
     const { lat, lon } = req.query;
     
     if (!lat || !lon) {
+      console.log('Missing lat or lon parameters');
       return res.status(400).json({ error: 'Latitude and longitude are required' });
     }
     
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/current.json`,
-      {
-        params: {
-          key: process.env.WEATHER_API_KEY,
-          q: `${lat},${lon}`,
-        }
-      }
-    );
+    console.log('Fetching weather data for coordinates:', lat, lon);
+    const data = await makeWeatherApiRequest('current.json', { q: `${lat},${lon}` });
     
-    res.json(response.data);
+    console.log('Weather data received:', data);
+    res.json(data);
   } catch (error) {
-    console.error('Error fetching weather by coordinates:', error);
-    res.status(500).json({ error: 'Failed to fetch weather data' });
+    console.error('Error in /coordinates endpoint:', error);
+    res.status(error.status || 500).json({ error: error.message });
   }
 });
 
 // Get current weather by location name
-router.get('/location', async (req, res) => {
+router.get('/location',cors(), async (req, res) => {
   try {
     const { name } = req.query;
     
@@ -40,30 +64,15 @@ router.get('/location', async (req, res) => {
       return res.status(400).json({ error: 'Location name is required' });
     }
     
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/current.json`,
-      {
-        params: {
-          key: process.env.WEATHER_API_KEY,
-          q: name,
-        }
-      }
-    );
-    
-    res.json(response.data);
+    const data = await makeWeatherApiRequest('current.json', { q: name });
+    res.json(data);
   } catch (error) {
-    console.error('Error fetching weather by location name:', error);
-    
-    if (error.response && error.response.status === 400) {
-      return res.status(404).json({ error: 'Location not found' });
-    }
-    
-    res.status(500).json({ error: 'Failed to fetch weather data' });
+    res.status(error.status || 500).json({ error: error.message });
   }
 });
 
 // Get forecast by coordinates
-router.get('/forecast', async (req, res) => {
+router.get('/forecast',cors(), async (req, res) => {
   try {
     const { lat, lon, name, days = 5 } = req.query;
     let query;
@@ -76,32 +85,25 @@ router.get('/forecast', async (req, res) => {
       return res.status(400).json({ error: 'Either coordinates or location name is required' });
     }
     
-    const response = await axios.get(
-      `https://api.weatherapi.com/v1/forecast.json`,
-      {
-        params: {
-          key: process.env.WEATHER_API_KEY,
-          q: query,
-          days: days,
-          aqi: 'yes',
-          alerts: 'yes'
-        }
-      }
-    );
+    const data = await makeWeatherApiRequest('forecast.json', { 
+      q: query, 
+      days: days, 
+      aqi: 'yes', 
+      alerts: 'yes' 
+    });
     
-    res.json(response.data);
+    res.json(data);
   } catch (error) {
-    console.error('Error fetching forecast:', error);
-    res.status(500).json({ error: 'Failed to fetch forecast data' });
+    res.status(error.status || 500).json({ error: error.message });
   }
 });
 
 // Save weather record
-router.post('/record', async (req, res) => {
+router.post('/record',cors(), async (req, res) => {
   try {
     const { locationId, temperature, humidity, pressure, windSpeed, description, icon } = req.body;
     
-    if (!locationId || !temperature) {
+    if (!locationId || !temperature === undefined) {
       return res.status(400).json({ error: 'LocationId and temperature are required' });
     }
     
@@ -126,7 +128,7 @@ router.post('/record', async (req, res) => {
 });
 
 // Get all weather records for a location
-router.get('/records/:locationId', async (req, res) => {
+router.get('/records/:locationId',cors(), async (req, res) => {
   try {
     const { locationId } = req.params;
     
@@ -140,7 +142,7 @@ router.get('/records/:locationId', async (req, res) => {
 });
 
 // Update a weather record
-router.put('/records/:id', async (req, res) => {
+router.put('/records/:id',cors(), async (req, res) => {
   try {
     const { id } = req.params;
     const { temperature, humidity, pressure, windSpeed, description, icon } = req.body;
@@ -170,7 +172,7 @@ router.put('/records/:id', async (req, res) => {
 });
 
 // Delete a weather record
-router.delete('/records/:id', async (req, res) => {
+router.delete('/records/:id',cors(), async (req, res) => {
   try {
     const { id } = req.params;
     

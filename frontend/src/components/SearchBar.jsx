@@ -22,7 +22,7 @@ const SearchBar = ({ onSearch, onGetCurrentLocation, isLoading }) => {
         <div className="flex gap-2">
           <button
             type="submit"
-            className="flex-1 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="flex-1 p-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
             disabled={isLoading}
           >
             {isLoading ? 'Loading...' : 'Get Weather'}

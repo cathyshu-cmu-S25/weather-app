@@ -5,7 +5,7 @@ const WeatherDisplay = ({ weatherData }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="p-4 bg-blue-600 text-white">
+      <div className="p-4 bg-indigo-500 text-white">
         <h2 className="text-xl font-bold">{weatherData.location.name}, {weatherData.location.country}</h2>
         <p>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
       </div>

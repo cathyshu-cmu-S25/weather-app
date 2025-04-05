@@ -1,20 +1,37 @@
-const API_KEY = process.env.OPENWEATHER_API_KEY;
-
 export const getWeatherByCoords = async (lat, lon) => {
-  const response = await fetch(
-    `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${lat},${lon}&aqi=yes`
-  );
-  
-  if (!response.ok) {
-    throw new Error('Weather data not available');
+  try {
+    const response = await fetch(
+      `http://localhost:3001/api/weather/coordinates?lat=${lat}&lon=${lon}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error('Weather data not available');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
   }
-  
-  return await response.json();
 };
 
 export const getWeatherByLocation = async (locationName) => {
   const response = await fetch(
-    `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${locationName}&aqi=yes`
+    `http://localhost:3001/api/weather/location?name=${locationName}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
   );
   
   if (!response.ok) {

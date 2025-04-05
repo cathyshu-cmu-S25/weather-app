@@ -69,7 +69,7 @@ function App() {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 flex flex-col items-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-100 to-indigo-300 flex flex-col items-center p-4">
       <Header />
       
       <main className="w-full max-w-md">
