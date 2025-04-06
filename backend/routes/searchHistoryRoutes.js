@@ -1,4 +1,3 @@
-// Import the SearchHistory model
 const express = require('express');
 const router = express.Router();
 const searchHistoryController = require('../controllers/searchHistoryController');

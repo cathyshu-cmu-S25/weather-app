@@ -1,10 +1,8 @@
-// routes/locations.js
 const express = require('express');
 const router = express.Router();
 const locationController = require('../controllers/locationController');
 const cors = require('cors');
 
-// Apply cors middleware to all routes
 router.use(cors());
 
 // Get all locations

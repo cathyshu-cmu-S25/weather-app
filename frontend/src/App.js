@@ -1,4 +1,3 @@
-// Frontend: App.js
 import React, { useState, useEffect } from 'react';
 import './index.css';
 

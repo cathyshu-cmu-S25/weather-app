@@ -1,4 +1,3 @@
-// controllers/locationController.js
 const Location = require('../models/Location');
 const WeatherRecord = require('../models/Weather');
 

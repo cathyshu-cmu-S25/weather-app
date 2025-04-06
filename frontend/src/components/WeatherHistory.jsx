@@ -1,6 +1,3 @@
-// Update the WeatherHistory.jsx component to fix the UI issues
-// Make sure table fits within the container and buttons aren't cut off
-
 import React, { useState, useEffect } from 'react';
 import { getSearchHistory, saveSearch, deleteSearchRecord, fetchWeatherForSavedLocation } from '../services/weatherService';
 

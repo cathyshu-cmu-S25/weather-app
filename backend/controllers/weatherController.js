@@ -1,4 +1,3 @@
-// controllers/weatherController.js
 const axios = require('axios');
 const WeatherRecord = require('../models/Weather');
 
@@ -37,7 +36,6 @@ async function saveToSearchHistory(name, lat, lon) {
     });
   } catch (error) {
     console.error('Error saving to search history:', error);
-    // Continue even if saving to history fails
   }
 }
 

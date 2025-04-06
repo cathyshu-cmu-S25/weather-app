@@ -1,4 +1,3 @@
-// controllers/exportController.js
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
@@ -6,9 +5,7 @@ const WeatherRecord = require('../models/Weather');
 const SearchHistory = require('../models/History');
 const Location = require('../models/Location');
 
-/**
- * Export all weather data for a location to PDF
- */
+
 exports.exportWeatherToPDF = async (req, res) => {
   try {
     const { locationId, locationName } = req.query;
@@ -121,9 +118,6 @@ exports.exportWeatherToPDF = async (req, res) => {
   }
 };
 
-/**
- * Export search history to PDF
- */
 exports.exportSearchHistoryToPDF = async (req, res) => {
   try {
     // Get all search history

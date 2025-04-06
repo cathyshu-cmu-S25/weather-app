@@ -1,4 +1,3 @@
-// controllers/searchHistoryController.js
 const SearchHistory = require('../models/History');
 
 // Get all search history
