@@ -1,7 +1,7 @@
 export const getWeatherByCoords = async (lat, lon) => {
   try {
     const response = await fetch(
-      `http://localhost:3001/api/weather/coordinates?lat=${lat}&lon=${lon}`,
+      `https://weather-app-a0n2.onrender.com/api/weather/coordinates?lat=${lat}&lon=${lon}`,
       {
         method: 'GET',
         headers: {
@@ -19,7 +19,7 @@ export const getWeatherByCoords = async (lat, lon) => {
     const currentData = await response.json();
 
     const forecastResponse = await fetch(
-      `http://localhost:3001/api/weather/forecast?lat=${lat}&lon=${lon}&days=5`,
+      `https://weather-app-a0n2.onrender.com/api/weather/forecast?lat=${lat}&lon=${lon}&days=5`,
       {
         method: 'GET',
         headers: {
@@ -51,7 +51,7 @@ export const getWeatherByCoords = async (lat, lon) => {
 export const getWeatherByLocation = async (locationName) => {
   try {
     const currentResponse = await fetch(
-      `http://localhost:3001/api/weather/location?name=${encodeURIComponent(locationName)}`,
+      `https://weather-app-a0n2.onrender.com/api/weather/location?name=${encodeURIComponent(locationName)}`,
       {
         method: 'GET',
         headers: {
@@ -70,7 +70,7 @@ export const getWeatherByLocation = async (locationName) => {
     
     // get forecast data
     const forecastResponse = await fetch(
-      `http://localhost:3001/api/weather/forecast?name=${encodeURIComponent(locationName)}&days=5`,
+      `https://weather-app-a0n2.onrender.com/api/weather/forecast?name=${encodeURIComponent(locationName)}&days=5`,
       {
         method: 'GET',
         headers: {
@@ -104,7 +104,7 @@ export const getWeatherByLocation = async (locationName) => {
 export const getSearchHistory = async () => {
   try {
     const response = await fetch(
-      `http://localhost:3001/api/history`,
+      `https://weather-app-a0n2.onrender.com/api/history`,
       {
         method: 'GET',
         headers: {
@@ -128,7 +128,7 @@ export const getSearchHistory = async () => {
 export const deleteSearchRecord = async (recordId) => {
   try {
     const response = await fetch(
-      `http://localhost:3001/api/history/${recordId}`,
+      `https://weather-app-a0n2.onrender.com/api/history/${recordId}`,
       {
         method: 'DELETE',
         headers: {

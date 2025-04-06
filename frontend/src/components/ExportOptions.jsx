@@ -7,11 +7,11 @@ const ExportOptions = ({ locationName, locationId }) => {
     if (locationName) params.append('locationName', locationName);
     
     // Open the PDF in a new tab
-    window.open(`http://localhost:3001/api/export/weather/pdf?${params.toString()}`, '_blank');
+    window.open(`https://weather-app-a0n2.onrender.com/api/export/weather/pdf?${params.toString()}`, '_blank');
   };
 
   const handleExportHistoryPDF = () => {
-    window.open('http://localhost:3001/api/export/history/pdf', '_blank');
+    window.open('https://weather-app-a0n2.onrender.com/api/export/history/pdf', '_blank');
   };
 
   return (

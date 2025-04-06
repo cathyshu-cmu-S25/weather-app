@@ -29,7 +29,7 @@ async function makeWeatherApiRequest(endpoint, params) {
 async function saveToSearchHistory(name, lat, lon) {
   try {
     // Call the history API to save the search
-    await axios.post('http://localhost:3001/api/history', {
+    await axios.post('https://weather-app-a0n2.onrender.com/api/history', {
       name, 
       lat, 
       lon
