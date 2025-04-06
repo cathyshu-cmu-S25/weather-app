@@ -8,6 +8,7 @@ import SearchBar from './components/SearchBar';
 import ErrorMessage from './components/ErrorMessage';
 import WeatherDisplay from './components/WeatherDisplay';
 import ForecastDisplay from './components/ForecastDisplay';
+import SearchHistory from './components/WeatherHistory';
 
 import { getWeatherByCoords, getWeatherByLocation } from './services/weatherService';
 function App() {
@@ -15,6 +16,7 @@ function App() {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('current');
   
   // Get current location on initial load
   useEffect(() => {
@@ -70,23 +72,53 @@ function App() {
     }
   };
   
+  const handleSelectSavedLocation = (weatherData, locationName) => {
+    setWeather(weatherData);
+    setLocation(locationName);
+    setActiveTab('current'); // Switch to current tab to show the loaded weather
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-100 to-indigo-300 flex flex-col items-center p-4">
       <Header />
       
       <main className="w-full max-w-md">
-        <SearchBar 
-          onSearch={fetchWeatherByLocation}
-          onGetCurrentLocation={getUserLocation}
-          isLoading={loading}
-        />
+        <div className="flex mb-4">
+          <button
+            className={`flex-1 p-2 ${activeTab === 'current' ? 'bg-indigo-500 text-white' : 'bg-white text-indigo-500'} rounded-l-md font-medium`}
+            onClick={() => setActiveTab('current')}
+          >
+            Current Weather
+          </button>
+          <button
+            className={`flex-1 p-2 ${activeTab === 'history' ? 'bg-indigo-500 text-white' : 'bg-white text-indigo-500'} rounded-r-md font-medium`}
+            onClick={() => setActiveTab('history')}
+          >
+            Search History
+          </button>
+        </div>
         
-        <ErrorMessage message={error} />
-        {weather && !error && (
+        {activeTab === 'current' && (
           <>
-          <WeatherDisplay weatherData={weather} />
-          <ForecastDisplay forecastData={weather} />
+            <SearchBar 
+              onSearch={fetchWeatherByLocation}
+              onGetCurrentLocation={getUserLocation}
+              isLoading={loading}
+            />
+            
+            <ErrorMessage message={error} />
+            
+            {weather && !error && (
+              <>
+                <WeatherDisplay weatherData={weather} />
+                <ForecastDisplay forecastData={weather} />
+              </>
+            )}
           </>
+        )}
+        
+        {activeTab === 'history' && (
+          <SearchHistory onSelectLocation={handleSelectSavedLocation} />
         )}
       </main>
       

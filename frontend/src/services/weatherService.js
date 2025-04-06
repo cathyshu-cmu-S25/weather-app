@@ -99,3 +99,56 @@ export const getWeatherByLocation = async (locationName) => {
     throw error;
   }
 };
+
+// Get search history
+export const getSearchHistory = async () => {
+  try {
+    const response = await fetch(
+      `http://localhost:3001/api/history`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch search history');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Fetch search history error:', error);
+    throw error;
+  }
+};
+
+// Delete a search record
+export const deleteSearchRecord = async (recordId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3001/api/history/${recordId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error('Failed to delete search record');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Delete search record error:', error);
+    throw error;
+  }
+};
+
+// Fetch weather for a saved location
+export const fetchWeatherForSavedLocation = async (location) => {
+  return await getWeatherByCoords(location.lat, location.lon);
+};

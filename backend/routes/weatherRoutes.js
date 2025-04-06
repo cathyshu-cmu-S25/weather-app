@@ -30,6 +30,20 @@ async function makeWeatherApiRequest(endpoint, params) {
   }
 }
 
+async function saveToSearchHistory(name, lat, lon) {
+  try {
+    // Call the history API to save the search
+    await axios.post('http://localhost:3001/api/history', {
+      name, 
+      lat, 
+      lon
+    });
+  } catch (error) {
+    console.error('Error saving to search history:', error);
+    // Continue even if saving to history fails
+  }
+}
+
 // Get current weather by coordinates
 router.get('/coordinates', cors(), async (req, res) => {
   try {
@@ -45,6 +59,11 @@ router.get('/coordinates', cors(), async (req, res) => {
     const data = await makeWeatherApiRequest('current.json', { q: `${lat},${lon}` });
     
     console.log('Weather data received:', data);
+    // Save to search history
+    saveToSearchHistory(data.location.name, lat, lon).catch(error => {
+      console.error('Error saving to search history:', error);
+    });
+
     res.json(data);
   } catch (error) {
     console.error('Error in /coordinates endpoint:', error);
@@ -62,6 +81,9 @@ router.get('/location',cors(), async (req, res) => {
     }
     
     const data = await makeWeatherApiRequest('current.json', { q: name });
+    saveToSearchHistory(data.location.name, data.location.lat, data.location.lon).catch(error => {
+      console.error('Error saving to search history:', error);
+    });
     res.json(data);
   } catch (error) {
     res.status(error.status || 500).json({ error: error.message });
@@ -96,11 +118,11 @@ router.get('/forecast',cors(), async (req, res) => {
 });
 
 // Save weather record
-router.post('/record',cors(), async (req, res) => {
+router.post('/record', cors(), async (req, res) => {
   try {
     const { locationId, temperature, humidity, pressure, windSpeed, description, icon } = req.body;
     
-    if (!locationId || !temperature === undefined) {
+    if (!locationId || temperature === undefined) {
       return res.status(400).json({ error: 'LocationId and temperature are required' });
     }
     
@@ -125,7 +147,7 @@ router.post('/record',cors(), async (req, res) => {
 });
 
 // Get all weather records for a location
-router.get('/records/:locationId',cors(), async (req, res) => {
+router.get('/records/:locationId', cors(), async (req, res) => {
   try {
     const { locationId } = req.params;
     
@@ -139,7 +161,7 @@ router.get('/records/:locationId',cors(), async (req, res) => {
 });
 
 // Update a weather record
-router.put('/records/:id',cors(), async (req, res) => {
+router.put('/records/:id', cors(), async (req, res) => {
   try {
     const { id } = req.params;
     const { temperature, humidity, pressure, windSpeed, description, icon } = req.body;
@@ -169,7 +191,7 @@ router.put('/records/:id',cors(), async (req, res) => {
 });
 
 // Delete a weather record
-router.delete('/records/:id',cors(), async (req, res) => {
+router.delete('/records/:id', cors(), async (req, res) => {
   try {
     const { id } = req.params;
     
