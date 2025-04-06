@@ -31,11 +31,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/weather-a
 const weatherRoutes = require('./routes/weatherRoutes');
 const exportRoutes = require('./routes/exportRoutes');
 const historyRoutes = require('./routes/searchHistoryRoutes');
-const locationsRoutes = require('./routes/locationsRoutes');
 
 // Use routes
 app.use('/api/weather', weatherRoutes);
-app.use('/api/locations', locationsRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/history', historyRoutes);
 
