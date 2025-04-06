@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import SearchBar from './components/SearchBar';
 import ErrorMessage from './components/ErrorMessage';
 import WeatherDisplay from './components/WeatherDisplay';
+import ForecastDisplay from './components/ForecastDisplay';
 
 import { getWeatherByCoords, getWeatherByLocation } from './services/weatherService';
 function App() {
@@ -59,6 +60,7 @@ function App() {
     try {
       setLoading(true);
       const data = await getWeatherByLocation(locationName);
+      console.log("Weather API response:", data);
       setWeather(data);
       setLocation(locationName);
       setLoading(false);
@@ -80,9 +82,11 @@ function App() {
         />
         
         <ErrorMessage message={error} />
-        
         {weather && !error && (
+          <>
           <WeatherDisplay weatherData={weather} />
+          <ForecastDisplay forecastData={weather} />
+          </>
         )}
       </main>
       

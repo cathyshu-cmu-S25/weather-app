@@ -12,9 +12,6 @@ const API_BASE_URL = 'https://api.weatherapi.com/v1';
 
 async function makeWeatherApiRequest(endpoint, params) {
   try {
-    console.log(`API Request to: ${API_BASE_URL}/${endpoint}`);
-    console.log('Request params:', { ...params, key: API_KEY.substring(0, 5) + '...' });
-    
     const response = await axios.get(`${API_BASE_URL}/${endpoint}`, {
       params: {
         key: API_KEY,
