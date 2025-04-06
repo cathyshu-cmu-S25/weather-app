@@ -1,11 +1,9 @@
-// backend/routes/locations.js
-const express = require('express');
-const router = express.Router();
+// controllers/locationController.js
 const Location = require('../models/Location');
 const WeatherRecord = require('../models/Weather');
 
 // Get all locations
-router.get('/', async (req, res) => {
+exports.getAllLocations = async (req, res) => {
   try {
     const locations = await Location.find().sort({ createdAt: -1 });
     res.json(locations);
@@ -13,10 +11,10 @@ router.get('/', async (req, res) => {
     console.error('Error fetching locations:', error);
     res.status(500).json({ error: 'Failed to fetch locations' });
   }
-});
+};
 
 // Create a new location
-router.post('/', async (req, res) => {
+exports.createLocation = async (req, res) => {
   try {
     const { name, lat, lon } = req.body;
     
@@ -38,10 +36,10 @@ router.post('/', async (req, res) => {
     console.error('Error saving location:', error);
     res.status(500).json({ error: 'Failed to save location' });
   }
-});
+};
 
 // Get location by ID
-router.get('/:id', async (req, res) => {
+exports.getLocationById = async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -56,10 +54,10 @@ router.get('/:id', async (req, res) => {
     console.error('Error fetching location:', error);
     res.status(500).json({ error: 'Failed to fetch location' });
   }
-});
+};
 
 // Update a location
-router.put('/:id', async (req, res) => {
+exports.updateLocation = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, lat, lon } = req.body;
@@ -83,10 +81,10 @@ router.put('/:id', async (req, res) => {
     console.error('Error updating location:', error);
     res.status(500).json({ error: 'Failed to update location' });
   }
-});
+};
 
 // Delete a location
-router.delete('/:id', async (req, res) => {
+exports.deleteLocation = async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -105,6 +103,4 @@ router.delete('/:id', async (req, res) => {
     console.error('Error deleting location:', error);
     res.status(500).json({ error: 'Failed to delete location' });
   }
-});
-
-module.exports = router;
+};
