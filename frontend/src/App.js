@@ -9,6 +9,7 @@ import ErrorMessage from './components/ErrorMessage';
 import WeatherDisplay from './components/WeatherDisplay';
 import ForecastDisplay from './components/ForecastDisplay';
 import SearchHistory from './components/WeatherHistory';
+import ExportOptions from './components/ExportOptions';
 
 import { getWeatherByCoords, getWeatherByLocation } from './services/weatherService';
 function App() {
@@ -112,6 +113,10 @@ function App() {
               <>
                 <WeatherDisplay weatherData={weather} />
                 <ForecastDisplay forecastData={weather} />
+                <ExportOptions 
+                  locationName={weather.location.name} 
+                  locationId={weather.location.id} // If your API provides this
+                />
               </>
             )}
           </>

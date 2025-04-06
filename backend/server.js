@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -30,16 +29,14 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/weather-a
 
 // Import routes
 const weatherRoutes = require('./routes/weatherRoutes');
-const locationRoutes = require('./routes/locations');
-// const exportRoutes = require('./routes/export');
-const youtubeRoutes = require('./routes/youtube');
+const exportRoutes = require('./routes/exportRoutes');
 const historyRoutes = require('./routes/searchHistoryRoutes');
+const locationsRoutes = require('./routes/locationsRoutes');
 
 // Use routes
 app.use('/api/weather', weatherRoutes);
-app.use('/api/locations', locationRoutes);
-// app.use('/api/export', exportRoutes);
-app.use('/api/youtube', youtubeRoutes);
+app.use('/api/locations', locationsRoutes);
+app.use('/api/export', exportRoutes);
 app.use('/api/history', historyRoutes);
 
 app.get('/', (req, res) => { 
