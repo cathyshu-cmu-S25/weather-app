@@ -5,6 +5,23 @@ const path = require('path');
 const axios = require('axios');
 require('dotenv').config();
 
+const debugRoutes = (router) => {
+  if (!router.stack) return;
+  
+  console.log('Debug Routes:');
+  router.stack.forEach((layer) => {
+    if (layer.route) {
+      const path = layer.route.path;
+      const methods = Object.keys(layer.route.methods).join(', ');
+      console.log(`Route: ${path}, Methods: ${methods}`);
+    } else if (layer.name === 'router' && layer.handle.stack) {
+      console.log(`Router middleware:`);
+      debugRoutes(layer.handle);
+    }
+  });
+};
+
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
