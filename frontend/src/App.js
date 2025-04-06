@@ -114,7 +114,7 @@ function App() {
                 <ForecastDisplay forecastData={weather} />
                 <ExportOptions 
                   locationName={weather.location.name} 
-                  locationId={weather.location.id} // If your API provides this
+                  locationId={weather.location.id}
                 />
               </>
             )}
